@@ -30,7 +30,7 @@ def lade_fragen():
 
 @st.cache_data
 def lade_studiengaenge():
-    df = pd.read_csv("Zuordnung_Studium_Beruf_Vollständig_MOTIVIERT.csv", sep=";")
+    df = pd.read_csv("Zuordnung_Studium_Beruf_Vollständig_MOTIVIERT.csv", sep="\t")
     
     def sichere_float_konvertierung(val):
         try:
