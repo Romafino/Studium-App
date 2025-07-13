@@ -1,4 +1,3 @@
-
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -30,18 +29,9 @@ def lade_fragen():
 
 @st.cache_data
 def lade_studiengaenge():
-    df = pd.read_csv("studiengaenge_bewertung_komplett.csv", sep=";")
-    
-    def sichere_float_konvertierung(val):
-        try:
-            return float(str(val).replace(",", "."))
-        except:
-            return np.nan
-
-    for col in df.columns[2:]:
-        df[col] = df[col].apply(sichere_float_konvertierung)
-    
+    df = pd.read_csv("Zuordnung_Studium_Beruf_Vollständig_MOTIVIERT.csv", sep="\t")
     return df
+
 # ----------------- Fragebogen -----------------
 def fragebogen_seite():
     fragen = lade_fragen()
@@ -106,7 +96,7 @@ def berechne_profil():
 # ----------------- Matching -----------------
 def berechne_match(profil, zeile):
     dims = profil.keys()
-    abweichung = np.mean([abs(profil[d] - zeile.get(d, 3)) for d in dims if d in zeile])
+    abweichung = np.mean([abs(profil[d] - 3) for d in dims])  # placeholder, wenn keine Bewertung im Datensatz
     score = max(0, 100 - abweichung * 20)
 
     if st.session_state.zusatz['motivation'] == "Berufsaussichten" and str(zeile.get("Arbeitsmarktbedarf", "")).lower() == "sehr hoch":
@@ -130,20 +120,23 @@ def ergebnisse_seite():
         st.write(f"**{dim}**: {bar} ({profil[dim]:.1f}/5)")
 
     st.subheader("🎯 Top Studiengänge")
-    for i, row in top.iterrows():
-        with st.expander(f"{row['Studiengang']} ({row['Hochschule / Ort']}) — Match: {row['Match']:.0f}%"):
-            col1, col2 = st.columns(2)
-            with col1:
-                st.write(f"**NC:** {row.get('NC', 'k.A.')}")
-                st.write(f"**Gehalt:** {row.get('Einstiegsgehalt', 'k.A.')} €")
-            with col2:
-                st.write(f"**Berufsfelder:** {row.get('Berufsfelder', 'k.A.')}")
-                if row['Match'] >= 80:
-                    st.markdown("<p class='match-high'>✨ Sehr gute Übereinstimmung</p>", unsafe_allow_html=True)
-                elif row['Match'] >= 60:
-                    st.markdown("<p class='match-medium'>👍 Gute Übereinstimmung</p>", unsafe_allow_html=True)
-                else:
-                    st.markdown("<p class='match-low'>🤔 Mäßige Übereinstimmung</p>", unsafe_allow_html=True)
+    for _, row in top.iterrows():
+        studiengang = row.get('Studiengang', 'Unbekannt')
+        match = row.get('Match', 0)
+        with st.expander(f"{studiengang} — Match: {match:.0f}%"):
+            st.write(f"**NC:** {row.get('NC', 'k.A.')}")
+            st.write(f"**Einstiegsgehalt:** {row.get('Einstiegsgehalt', 'k.A.')} €")
+            st.write(f"**Berufsfelder:** {row.get('Berufsfelder TOP3', 'k.A.')}")
+            st.write(f"**Arbeitsmarktbedarf:** {row.get('Arbeitsmarktbedarf', 'k.A.')}")
+            st.write(f"**Einstieg spanne:** {row.get('Einstieg spanne', 'k.A.')}")
+            st.write(f"**Gehalt nach 5 Jahren:** {row.get('Gehalt nach 5 Jahren', 'k.A.')}")
+
+            if match >= 80:
+                st.markdown("<p class='match-high'>✨ Sehr gute Übereinstimmung</p>", unsafe_allow_html=True)
+            elif match >= 60:
+                st.markdown("<p class='match-medium'>👍 Gute Übereinstimmung</p>", unsafe_allow_html=True)
+            else:
+                st.markdown("<p class='match-low'>🤔 Mäßige Übereinstimmung</p>", unsafe_allow_html=True)
 
     if st.button("🔄 Neuer Durchlauf"):
         st.session_state.clear()
