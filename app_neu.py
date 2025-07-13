@@ -7,9 +7,16 @@ st.set_page_config(page_title="Studiengangs-Matching", page_icon="🎓", layout=
 # ----------------- Styling -----------------
 st.markdown("""
 <style>
-    .match-high { color: green; font-weight: bold; font-size: 1.2em; }
-    .match-medium { color: orange; font-weight: bold; font-size: 1.2em; }
-    .match-low { color: red; font-weight: bold; font-size: 1.2em; }
+    .match-card {
+        background-color: #f9f9f9;
+        padding: 1rem;
+        border-radius: 1rem;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        margin-bottom: 1rem;
+    }
+    .match-high { color: green; font-weight: bold; font-size: 1.1em; }
+    .match-medium { color: orange; font-weight: bold; font-size: 1.1em; }
+    .match-low { color: red; font-weight: bold; font-size: 1.1em; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -21,6 +28,8 @@ def init_state():
         st.session_state.answers = {}
     if 'zusatz' not in st.session_state:
         st.session_state.zusatz = {}
+    if 'ergebnis_seite' not in st.session_state:
+        st.session_state.ergebnis_seite = 0
 
 # ----------------- Daten laden -----------------
 @st.cache_data
@@ -96,7 +105,7 @@ def berechne_profil():
 # ----------------- Matching -----------------
 def berechne_match(profil, zeile):
     dims = profil.keys()
-    abweichung = np.mean([abs(profil[d] - 3) for d in dims])  # placeholder, wenn keine Bewertung im Datensatz
+    abweichung = np.mean([abs(profil[d] - 3) for d in dims])
     score = max(0, 100 - abweichung * 20)
 
     if st.session_state.zusatz['motivation'] == "Berufsaussichten" and str(zeile.get("Arbeitsmarktbedarf", "")).lower() == "sehr hoch":
@@ -111,7 +120,7 @@ def ergebnisse_seite():
     profil = berechne_profil()
     df = lade_studiengaenge()
     df['Match'] = df.apply(lambda row: berechne_match(profil, row), axis=1)
-    top = df.sort_values('Match', ascending=False).head(10)
+    df = df.sort_values('Match', ascending=False)
 
     st.subheader("🧠 Dein Persönlichkeitsprofil")
     for dim in sorted(profil):
@@ -119,18 +128,26 @@ def ergebnisse_seite():
         bar = "🟦" * filled + "⬜" * (5 - filled)
         st.write(f"**{dim}**: {bar} ({profil[dim]:.1f}/5)")
 
-    st.subheader("🎯 Top Studiengänge")
+    st.subheader("🎯 Studiengänge passend zu deinem Profil")
+    seite = st.session_state.ergebnis_seite
+    anzahl_pro_seite = 10
+    start = seite * anzahl_pro_seite
+    end = start + anzahl_pro_seite
+    top = df.iloc[start:end]
+
     for _, row in top.iterrows():
         studiengang = row.get('Studiengang', 'Unbekannt')
         match = row.get('Match', 0)
 
-        with st.expander(f"{studiengang} — Match: {match:.0f}%"):
-            st.write(f"**NC:** {row.get('NC', 'k.A.')}")
-            st.write(f"**Einstiegsgehalt:** {row.get('Einstiegsgehalt', 'k.A.')} €")
-            st.write(f"**Berufsfelder:** {row.get('Berufsfelder TOP3', 'k.A.')}")
-            st.write(f"**Arbeitsmarktbedarf:** {row.get('Arbeitsmarktbedarf', 'k.A.')}")
-            st.write(f"**Einstieg spanne:** {row.get('Einstieg spanne', 'k.A.')}")
-            st.write(f"**Gehalt nach 5 Jahren:** {row.get('Gehalt nach 5 Jahren', 'k.A.')}")
+        with st.container():
+            st.markdown(f"<div class='match-card'>", unsafe_allow_html=True)
+            st.markdown(f"### 🎓 {studiengang} — Match: {match:.0f}%")
+            st.write(f"**📌 NC:** {row.get('NC', 'k.A.')}")
+            st.write(f"**💰 Einstiegsgehalt:** {row.get('Einstiegsgehalt', 'k.A.')} €")
+            st.write(f"**💼 Berufsfelder:** {row.get('Berufsfelder TOP3', 'k.A.')}")
+            st.write(f"**📈 Arbeitsmarktbedarf:** {row.get('Arbeitsmarktbedarf', 'k.A.')}")
+            st.write(f"**🪙 Einstiegsspanne:** {row.get('Einstieg spanne', 'k.A.')}")
+            st.write(f"**📊 Gehalt nach 5 Jahren:** {row.get('Gehalt nach 5 Jahren', 'k.A.')}")
 
             if match >= 80:
                 st.markdown("<p class='match-high'>✨ Sehr gute Übereinstimmung</p>", unsafe_allow_html=True)
@@ -138,6 +155,17 @@ def ergebnisse_seite():
                 st.markdown("<p class='match-medium'>👍 Gute Übereinstimmung</p>", unsafe_allow_html=True)
             else:
                 st.markdown("<p class='match-low'>🤔 Mäßige Übereinstimmung</p>", unsafe_allow_html=True)
+            st.markdown("</div>", unsafe_allow_html=True)
+
+    col1, col2 = st.columns([1, 1])
+    if seite > 0:
+        if col1.button("← Zurück", key="zurueck"):
+            st.session_state.ergebnis_seite -= 1
+            st.rerun()
+    if end < len(df):
+        if col2.button("Mehr anzeigen →", key="weiter"):
+            st.session_state.ergebnis_seite += 1
+            st.rerun()
 
     if st.button("🔄 Neuer Durchlauf"):
         st.session_state.clear()
