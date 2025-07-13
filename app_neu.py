@@ -131,7 +131,7 @@ def ergebnisse_seite():
 
     st.subheader("🎯 Top Studiengänge")
     for i, row in top.iterrows():
-        with st.expander(f"{row['Studiengang']} ({row['Hochschule / Ort']}) — Match: {row['Match']:.0f}%"):
+        with st.expander(f"{row['Studiengang']} — Match: {row['Match']:.0f}%"):
             col1, col2 = st.columns(2)
             with col1:
                 st.write(f"**NC:** {row.get('NC', 'k.A.')}")
