@@ -134,14 +134,7 @@ def ergebnisse_seite():
 
         st.markdown(f"### 🎓 {studiengang} — Match: {match:.0f}%")
 
-        toggle_key = f"show_{i}"
-        if toggle_key not in st.session_state:
-            st.session_state[toggle_key] = False
-
-        if st.button("🔎 Mehr anzeigen" if not st.session_state[toggle_key] else "🔽 Weniger anzeigen", key=f"button_{i}"):
-            st.session_state[toggle_key] = not st.session_state[toggle_key]
-
-        if st.session_state[toggle_key]:
+        if st.checkbox("Details anzeigen", key=f"details_{i}"):
             st.write(f"**📌 NC:** {row.get('NC', 'k.A.')}")
             st.write(f"**💰 Einstiegsgehalt:** {row.get('Einstiegsgehalt', 'k.A.')} €")
             st.write(f"**💼 Berufsfelder:** {row.get('Berufsfelder TOP3', 'k.A.')}")
