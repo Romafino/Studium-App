@@ -123,6 +123,7 @@ def ergebnisse_seite():
     for _, row in top.iterrows():
         studiengang = row.get('Studiengang', 'Unbekannt')
         match = row.get('Match', 0)
+
         with st.expander(f"{studiengang} — Match: {match:.0f}%"):
             st.write(f"**NC:** {row.get('NC', 'k.A.')}")
             st.write(f"**Einstiegsgehalt:** {row.get('Einstiegsgehalt', 'k.A.')} €")
