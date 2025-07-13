@@ -67,8 +67,8 @@ def fragebogen_seite():
                 "reverse": frage['Reverse'],
                 "wert": 6 - antwort if frage['Reverse'] == 1 else antwort
             }
-    else:
-        with st.expander("Zusatzfragen", expanded=True):
+    elif st.session_state.page == max_seiten - 1:
+        with st.expander("Zusatzfragen", expanded=False):
             st.session_state.zusatz['motivation'] = st.selectbox(
                 "Was motiviert dich bei der Studienwahl am meisten?",
                 ["Persönliche Leidenschaft", "Berufsaussichten", "Gesellschaftlicher Beitrag"]
