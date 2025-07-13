@@ -68,15 +68,15 @@ def fragebogen_seite():
                 "wert": 6 - antwort if frage['Reverse'] == 1 else antwort
             }
     else:
-        st.header("Zusatzfragen")
-        st.session_state.zusatz['motivation'] = st.selectbox(
-            "Was motiviert dich bei der Studienwahl am meisten?",
-            ["Persönliche Leidenschaft", "Berufsaussichten", "Gesellschaftlicher Beitrag"]
-        )
-        st.session_state.zusatz['umgebung'] = st.selectbox(
-            "In welcher Arbeitsumgebung fühlst du dich am wohlsten?",
-            ["Labor/Werkstatt", "Büro", "Mit Menschen", "Kreativ", "Draußen"]
-        )
+        with st.expander("Zusatzfragen", expanded=True):
+            st.session_state.zusatz['motivation'] = st.selectbox(
+                "Was motiviert dich bei der Studienwahl am meisten?",
+                ["Persönliche Leidenschaft", "Berufsaussichten", "Gesellschaftlicher Beitrag"]
+            )
+            st.session_state.zusatz['umgebung'] = st.selectbox(
+                "In welcher Arbeitsumgebung fühlst du dich am wohlsten?",
+                ["Labor/Werkstatt", "Büro", "Mit Menschen", "Kreativ", "Draußen"]
+            )
 
     col1, col2 = st.columns([1, 1])
     if st.session_state.page > 0:
