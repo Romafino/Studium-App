@@ -7,13 +7,6 @@ st.set_page_config(page_title="Studiengangs-Matching", page_icon="🎓", layout=
 # ----------------- Styling -----------------
 st.markdown("""
 <style>
-    .match-card {
-        background-color: #f9f9f9;
-        padding: 1rem;
-        border-radius: 1rem;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        margin-bottom: 1rem;
-    }
     .match-high { color: green; font-weight: bold; font-size: 1.1em; }
     .match-medium { color: orange; font-weight: bold; font-size: 1.1em; }
     .match-low { color: red; font-weight: bold; font-size: 1.1em; }
@@ -139,9 +132,7 @@ def ergebnisse_seite():
         studiengang = row.get('Studiengang', 'Unbekannt')
         match = row.get('Match', 0)
 
-        with st.container():
-            st.markdown(f"<div class='match-card'>", unsafe_allow_html=True)
-            st.markdown(f"### 🎓 {studiengang} — Match: {match:.0f}%")
+        with st.expander(f"🎓 {studiengang} — Match: {match:.0f}%"):
             st.write(f"**📌 NC:** {row.get('NC', 'k.A.')}")
             st.write(f"**💰 Einstiegsgehalt:** {row.get('Einstiegsgehalt', 'k.A.')} €")
             st.write(f"**💼 Berufsfelder:** {row.get('Berufsfelder TOP3', 'k.A.')}")
@@ -155,7 +146,6 @@ def ergebnisse_seite():
                 st.markdown("<p class='match-medium'>👍 Gute Übereinstimmung</p>", unsafe_allow_html=True)
             else:
                 st.markdown("<p class='match-low'>🤔 Mäßige Übereinstimmung</p>", unsafe_allow_html=True)
-            st.markdown("</div>", unsafe_allow_html=True)
 
     col1, col2 = st.columns([1, 1])
     if seite > 0:
