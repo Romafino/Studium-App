@@ -11,7 +11,7 @@ def lade_fragen():
 
 @st.cache_data
 def lade_studiengaenge():
-    df = pd.read_csv("Zuordnung_Studium_Beruf_Vollständig_MOTIVIERT.csv", sep="\t")
+    df = pd.read_csv("Zuordnung_Studium_Beruf_Vollständig_MOTIVIERT.csv", sep=";")
     return df
 
 def init_state():
