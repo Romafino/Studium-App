@@ -1,3 +1,4 @@
+
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -87,46 +88,97 @@ def berechne_match(profil, zeile):
     abweichung = np.mean([abs(profil[d] - 3) for d in dims])
     score = max(0, 100 - abweichung * 20)
 
+def beschreibe_profil(profil):
+    def skalierte_beschreibung(name, wert, stufen):
+        for (min_val, max_val, text) in stufen:
+            if min_val <= wert <= max_val:
+                return f"**{name}** ({wert:.1f}/5): {text}"
+        return f"**{name}** ({wert:.1f}/5): Beschreibung nicht verfügbar."
+
+    beschreibung = []
+    beschreibung.append("🔍 **RIASEC-Profil**")
+
+    riaisec_stufen = {
+        "Realistic": [
+            (1.0, 2.4, "Du bevorzugst geistige oder kreative Arbeit mehr als praktisches Tun."),
+            (2.5, 3.4, "Du fühlst dich in technischen und praktischen Aufgaben phasenweise wohl."),
+            (3.5, 5.0, "Du bist handlungsorientiert, praktisch veranlagt und liebst Technik, Werkzeuge oder Maschinen.")
+        ],
+        "Investigative": [
+            (1.0, 2.4, "Analytisches oder forschendes Arbeiten liegt dir weniger."),
+            (2.5, 3.4, "Du denkst gerne nach und analysierst – aber nur, wenn es Sinn ergibt."),
+            (3.5, 5.0, "Du hast eine starke Neigung zu Forschung, Analyse und tiefem Verständnis.")
+        ],
+        "Artistic": [
+            (1.0, 2.4, "Kreativität spielt in deinem Alltag eher eine untergeordnete Rolle."),
+            (2.5, 3.4, "Du hast ein gewisses Gespür für Gestaltung und Ideen, nutzt es aber selektiv."),
+            (3.5, 5.0, "Du bist ideenreich, fantasievoll und suchst kreative Ausdrucksformen.")
+        ],
+        "Social": [
+            (1.0, 2.4, "Du arbeitest lieber unabhängig und brauchst nicht ständig den Austausch mit anderen."),
+            (2.5, 3.4, "Du schätzt Zusammenarbeit in bestimmten Situationen, bist aber auch gerne für dich."),
+            (3.5, 5.0, "Du blühst in sozialen Kontexten auf und hilfst gerne anderen.")
+        ],
+        "Enterprising": [
+            (1.0, 2.4, "Führen, Überzeugen oder Risiko liegen dir eher nicht."),
+            (2.5, 3.4, "Du bist manchmal gerne durchsetzungsstark, aber ohne Dominanz."),
+            (3.5, 5.0, "Du bist führungsstark, überzeugend und hast ein Gespür für unternehmerisches Handeln.")
+        ],
+        "Conventional": [
+            (1.0, 2.4, "Du fühlst dich mit zu viel Struktur oder Routine schnell eingeschränkt."),
+            (2.5, 3.4, "Du schätzt Ordnung, aber brauchst auch Freiraum."),
+            (3.5, 5.0, "Du arbeitest gerne organisiert, planvoll und liebst klare Abläufe.")
+        ]
+    }
+
+    for dim in riaisec_stufen:
+        if dim in profil:
+            beschreibung.append(skalierte_beschreibung(dim, profil[dim], riaisec_stufen[dim]))
+
+    beschreibung.append("\n🧠 **Big Five Persönlichkeitsprofil**")
+
+    bigfive_stufen = {
+        "Openness": [
+            (1.0, 2.4, "Du bevorzugst Altbewährtes und hast weniger Interesse an Neuem oder Abstraktem."),
+            (2.5, 3.4, "Du bist offen für Neues, wenn es praktikabel und sinnvoll erscheint."),
+            (3.5, 5.0, "Du bist neugierig, kreativ und liebst es, neue Perspektiven zu entdecken.")
+        ],
+        "Conscientiousness": [
+            (1.0, 2.4, "Du lässt dich gerne treiben und brauchst Flexibilität."),
+            (2.5, 3.4, "Du bist zuverlässig, aber nimmst Regeln nicht zu ernst."),
+            (3.5, 5.0, "Du bist verantwortungsvoll, strukturiert und arbeitest zielgerichtet.")
+        ],
+        "Extraversion": [
+            (1.0, 2.4, "Du genießt Ruhe, denkst gerne nach und brauchst Zeit für dich."),
+            (2.5, 3.4, "Du bist sozial ausgewogen – du kannst sowohl mit Menschen als auch allein gut umgehen."),
+            (3.5, 5.0, "Du bist kommunikativ, energiegeladen und suchst den Austausch.")
+        ],
+        "Agreeableness": [
+            (1.0, 2.4, "Du hinterfragst gerne und sagst klar deine Meinung."),
+            (2.5, 3.4, "Du bist hilfsbereit, aber setzt auch klare Grenzen."),
+            (3.5, 5.0, "Du bist warmherzig, kooperativ und schätzt harmonische Beziehungen.")
+        ],
+        "Neuroticism": [
+            (1.0, 2.4, "Du bist emotional sehr stabil und lässt dich selten aus der Ruhe bringen."),
+            (2.5, 3.4, "Du bist reflektiert und reagierst situationsangemessen."),
+            (3.5, 5.0, "Du bist feinfühlig, sensibel und nimmst emotionale Reize stärker wahr.")
+        ]
+    }
+
+    for dim in bigfive_stufen:
+        if dim in profil:
+            beschreibung.append(skalierte_beschreibung(dim, profil[dim], bigfive_stufen[dim]))
+
+    return "\n".join(beschreibung)
+
+
+    beschreibung = []
+
+
     if st.session_state.zusatz['motivation'] == "Berufsaussichten" and str(zeile.get("Arbeitsmarktbedarf", "")).lower() == "sehr hoch":
         score *= 1.1
 
     return min(score, 100)
-
-def beschreibe_profil(profil):
-    beschreibung = []
-
-    r_map = {
-        "Realistic": "Du hast eine praktische Veranlagung und arbeitest gerne mit Werkzeugen, Maschinen oder in technischen Umgebungen.",
-        "Investigative": "Du bist analytisch und forschungsorientiert – du löst gerne komplexe Probleme.",
-        "Artistic": "Du bist kreativ, fantasievoll und drückst dich gerne gestalterisch aus.",
-        "Social": "Du arbeitest gerne mit Menschen zusammen und hilfst anderen.",
-        "Enterprising": "Du bist durchsetzungsfähig, führungsstark und gerne unternehmerisch aktiv.",
-        "Conventional": "Du bist organisiert, zuverlässig und arbeitest gerne mit klaren Strukturen."
-    }
-
-    b_map = {
-        "Openness": "Du bist offen für neue Erfahrungen, neugierig und kreativ.",
-        "Conscientiousness": "Du bist verantwortungsbewusst, strukturiert und zielstrebig.",
-        "Extraversion": "Du bist kontaktfreudig, aktiv und gerne unter Menschen.",
-        "Agreeableness": "Du bist mitfühlend, kooperativ und teamorientiert.",
-        "Neuroticism": "Du bist emotional sensibel und reflektiert – du nimmst Dinge oft tiefer wahr."
-    }
-
-    beschreibung.append("🔍 **RIASEC-Profil**")
-    for dim in ["Realistic", "Investigative", "Artistic", "Social", "Enterprising", "Conventional"]:
-        if dim in profil:
-            score = profil[dim]
-            text = r_map.get(dim, "")
-            beschreibung.append(f"**{dim}** ({score:.1f}/5): {text}")
-
-    beschreibung.append("\n🧠 **Big Five**")
-    for dim in ["Openness", "Conscientiousness", "Extraversion", "Agreeableness", "Neuroticism"]:
-        if dim in profil:
-            score = profil[dim]
-            text = b_map.get(dim, "")
-            beschreibung.append(f"**{dim}** ({score:.1f}/5): {text}")
-
-    return "\n".join(beschreibung)
 
 def ergebnisse_seite():
     st.header("📊 Deine Studiengangs-Empfehlungen")
@@ -138,6 +190,10 @@ def ergebnisse_seite():
 
     st.subheader("🧠 Dein Persönlichkeitsprofil")
     st.markdown(beschreibe_profil(profil))
+    for dim in sorted(profil):
+        filled = int(round(profil[dim]))
+        bar = "🟦" * filled + "⬜" * (5 - filled)
+        st.write(f"**{dim}**: {bar} ({profil[dim]:.1f}/5)")
 
     st.subheader("🎯 Top Studiengänge")
     seite = st.session_state.ergebnis_seite
@@ -183,3 +239,40 @@ def haupt():
 
 if __name__ == '__main__':
     haupt()
+
+
+
+
+    # RIASEC
+    r_map = {
+        "Realistic": "Du hast eine praktische Veranlagung und arbeitest gerne mit Werkzeugen, Maschinen oder in technischen Umgebungen.",
+        "Investigative": "Du bist analytisch und forschungsorientiert – du löst gerne komplexe Probleme.",
+        "Artistic": "Du bist kreativ, fantasievoll und drückst dich gerne gestalterisch aus.",
+        "Social": "Du arbeitest gerne mit Menschen zusammen und hilfst anderen.",
+        "Enterprising": "Du bist durchsetzungsfähig, führungsstark und gerne unternehmerisch aktiv.",
+        "Conventional": "Du bist organisiert, zuverlässig und arbeitest gerne mit klaren Strukturen."
+    }
+
+    b_map = {
+        "Openness": "Du bist offen für neue Erfahrungen, neugierig und kreativ.",
+        "Conscientiousness": "Du bist verantwortungsbewusst, strukturiert und zielstrebig.",
+        "Extraversion": "Du bist kontaktfreudig, aktiv und gerne unter Menschen.",
+        "Agreeableness": "Du bist mitfühlend, kooperativ und teamorientiert.",
+        "Neuroticism": "Du bist emotional sensibel und reflektiert – du nimmst Dinge oft tiefer wahr."
+    }
+
+    beschreibung.append("🔍 **RIASEC-Profil**")
+    for dim in ["Realistic", "Investigative", "Artistic", "Social", "Enterprising", "Conventional"]:
+        if dim in profil:
+            score = profil[dim]
+            text = r_map.get(dim, "")
+            beschreibung.append(f"**{dim}** ({score:.1f}/5): {text}")
+
+    beschreibung.append("\n🧠 **Big Five**")
+    for dim in ["Openness", "Conscientiousness", "Extraversion", "Agreeableness", "Neuroticism"]:
+        if dim in profil:
+            score = profil[dim]
+            text = b_map.get(dim, "")
+            beschreibung.append(f"**{dim}** ({score:.1f}/5): {text}")
+
+    return "\n".join(beschreibung)
