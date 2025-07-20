@@ -88,6 +88,10 @@ def berechne_match(profil, zeile):
     abweichung = np.mean([abs(profil[d] - 3) for d in dims])
     score = max(0, 100 - abweichung * 20)
 
+def beschreibe_profil(profil):
+    beschreibung = []
+
+
     if st.session_state.zusatz['motivation'] == "Berufsaussichten" and str(zeile.get("Arbeitsmarktbedarf", "")).lower() == "sehr hoch":
         score *= 1.1
 
@@ -155,8 +159,6 @@ if __name__ == '__main__':
 
 
 
-def beschreibe_profil(profil):
-    beschreibung = []
 
     # RIASEC
     r_map = {
@@ -191,4 +193,3 @@ def beschreibe_profil(profil):
             beschreibung.append(f"**{dim}** ({score:.1f}/5): {text}")
 
     return "\n".join(beschreibung)
-
