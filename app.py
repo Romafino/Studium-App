@@ -1,4 +1,3 @@
-
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -88,6 +87,11 @@ def berechne_match(profil, zeile):
     abweichung = np.mean([abs(profil[d] - 3) for d in dims])
     score = max(0, 100 - abweichung * 20)
 
+    if st.session_state.zusatz['motivation'] == "Berufsaussichten" and str(zeile.get("Arbeitsmarktbedarf", "")).lower() == "sehr hoch":
+        score *= 1.1
+
+    return min(score, 100)
+
 def beschreibe_profil(profil):
     beschreibung = []
 
@@ -124,15 +128,6 @@ def beschreibe_profil(profil):
 
     return "\n".join(beschreibung)
 
-
-    beschreibung = []
-
-
-    if st.session_state.zusatz['motivation'] == "Berufsaussichten" and str(zeile.get("Arbeitsmarktbedarf", "")).lower() == "sehr hoch":
-        score *= 1.1
-
-    return min(score, 100)
-
 def ergebnisse_seite():
     st.header("📊 Deine Studiengangs-Empfehlungen")
 
@@ -143,10 +138,6 @@ def ergebnisse_seite():
 
     st.subheader("🧠 Dein Persönlichkeitsprofil")
     st.markdown(beschreibe_profil(profil))
-    for dim in sorted(profil):
-        filled = int(round(profil[dim]))
-        bar = "🟦" * filled + "⬜" * (5 - filled)
-        st.write(f"**{dim}**: {bar} ({profil[dim]:.1f}/5)")
 
     st.subheader("🎯 Top Studiengänge")
     seite = st.session_state.ergebnis_seite
@@ -192,40 +183,3 @@ def haupt():
 
 if __name__ == '__main__':
     haupt()
-
-
-
-
-    # RIASEC
-    r_map = {
-        "Realistic": "Du hast eine praktische Veranlagung und arbeitest gerne mit Werkzeugen, Maschinen oder in technischen Umgebungen.",
-        "Investigative": "Du bist analytisch und forschungsorientiert – du löst gerne komplexe Probleme.",
-        "Artistic": "Du bist kreativ, fantasievoll und drückst dich gerne gestalterisch aus.",
-        "Social": "Du arbeitest gerne mit Menschen zusammen und hilfst anderen.",
-        "Enterprising": "Du bist durchsetzungsfähig, führungsstark und gerne unternehmerisch aktiv.",
-        "Conventional": "Du bist organisiert, zuverlässig und arbeitest gerne mit klaren Strukturen."
-    }
-
-    b_map = {
-        "Openness": "Du bist offen für neue Erfahrungen, neugierig und kreativ.",
-        "Conscientiousness": "Du bist verantwortungsbewusst, strukturiert und zielstrebig.",
-        "Extraversion": "Du bist kontaktfreudig, aktiv und gerne unter Menschen.",
-        "Agreeableness": "Du bist mitfühlend, kooperativ und teamorientiert.",
-        "Neuroticism": "Du bist emotional sensibel und reflektiert – du nimmst Dinge oft tiefer wahr."
-    }
-
-    beschreibung.append("🔍 **RIASEC-Profil**")
-    for dim in ["Realistic", "Investigative", "Artistic", "Social", "Enterprising", "Conventional"]:
-        if dim in profil:
-            score = profil[dim]
-            text = r_map.get(dim, "")
-            beschreibung.append(f"**{dim}** ({score:.1f}/5): {text}")
-
-    beschreibung.append("\n🧠 **Big Five**")
-    for dim in ["Openness", "Conscientiousness", "Extraversion", "Agreeableness", "Neuroticism"]:
-        if dim in profil:
-            score = profil[dim]
-            text = b_map.get(dim, "")
-            beschreibung.append(f"**{dim}** ({score:.1f}/5): {text}")
-
-    return "\n".join(beschreibung)
