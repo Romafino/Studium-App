@@ -1,4 +1,3 @@
-
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -107,7 +106,7 @@ def ergebnisse_seite():
         bar = "🟦" * filled + "⬜" * (5 - filled)
         st.write(f"**{dim}**: {bar} ({profil[dim]:.1f}/5)")
 
-    st.subheader("🎯 Studiengänge passend zu deinem Profil")
+    st.subheader("🎯 Top Studiengänge")
     seite = st.session_state.ergebnis_seite
     pro_seite = 10
     top = df.iloc[seite * pro_seite : (seite + 1) * pro_seite]
@@ -117,11 +116,16 @@ def ergebnisse_seite():
         match = row.get('Match', 0)
         with st.expander(f"{studiengang} — Match: {match:.0f}%"):
             st.write(f"**📌 NC:** {row.get('NC', 'k.A.')}")
-            st.write(f"**💰 Einstiegsgehalt:** {row.get('Einstiegsgehalt', 'k.A.')} €")
+
+            berufe = [row.get(f'Beruf_{i}', '') for i in range(1, 6)]
+            berufe = [b for b in berufe if pd.notna(b) and b.strip()]
+            st.write(f"**🧑‍🔧 Typische Berufe:** {', '.join(berufe) if berufe else 'k.A.'}")
+
             st.write(f"**💼 Berufsfelder:** {row.get('Berufsfelder TOP3', 'k.A.')}")
-            st.write(f"**📈 Arbeitsmarktbedarf:** {row.get('Arbeitsmarktbedarf', 'k.A.')}")
             st.write(f"**🪙 Einstiegsspanne:** {row.get('Einstieg spanne', 'k.A.')}")
-            st.write(f"**📊 Gehalt nach 5 Jahren:** {row.get('Gehalt nach 5 Jahren', 'k.A.')}")
+            st.write(f"**💰 Einstiegsgehalt:** {row.get('Einstiegsgehalt', 'k.A.')} €")
+            st.write(f"**📊 Gehalt nach 5 Jahren:** {row.get('Gehalt nach 5 Jahren', 'k.A.')} €")
+            st.write(f"**📈 Arbeitsmarktbedarf:** {row.get('Arbeitsmarktbedarf', 'k.A.')}")
 
     col1, col2 = st.columns(2)
     if seite > 0:
@@ -146,3 +150,4 @@ def haupt():
 
 if __name__ == '__main__':
     haupt()
+
