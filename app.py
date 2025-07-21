@@ -119,6 +119,69 @@ def beschreibe_profil(profil):
                 break
     return "\n".join(beschreibung)
 
+def beschreibe_profil_fliess(profil):
+    sätze = []
+
+    # Big Five
+    if "Openness" in profil:
+        if profil["Openness"] >= 4:
+            sätze.append("Du bist sehr offen für neue Erfahrungen, kreativ und interessierst dich für neue Ideen.")
+        elif profil["Openness"] >= 3:
+            sätze.append("Du bist aufgeschlossen und kannst dich für neue Perspektiven begeistern.")
+        else:
+            sätze.append("Du bevorzugst Vertrautes und hast weniger Interesse an Neuem.")
+
+    if "Conscientiousness" in profil:
+        if profil["Conscientiousness"] >= 4:
+            sätze.append("Du arbeitest sehr gewissenhaft, strukturiert und zielstrebig.")
+        elif profil["Conscientiousness"] >= 3:
+            sätze.append("Du bist eher zuverlässig, aber flexibel in deiner Organisation.")
+        else:
+            sätze.append("Du bevorzugst spontane Herangehensweisen und brauchst eher Freiraum.")
+
+    if "Extraversion" in profil:
+        if profil["Extraversion"] >= 4:
+            sätze.append("Du bist kontaktfreudig, gesellig und trittst gerne nach außen auf.")
+        elif profil["Extraversion"] >= 3:
+            sätze.append("Du bist sozial ausgeglichen – offen, aber auch gerne mal für dich.")
+        else:
+            sätze.append("Du bist eher zurückhaltend und arbeitest gerne unabhängig.")
+
+    if "Agreeableness" in profil:
+        if profil["Agreeableness"] >= 4:
+            sätze.append("Du bist hilfsbereit, verständnisvoll und arbeitest gerne mit anderen.")
+        elif profil["Agreeableness"] >= 3:
+            sätze.append("Du bist kooperativ, aber kannst auch klare Grenzen setzen.")
+        else:
+            sätze.append("Du bist eher direkt und sagst offen deine Meinung.")
+
+    if "Neuroticism" in profil:
+        if profil["Neuroticism"] >= 4:
+            sätze.append("Du nimmst Dinge oft tiefgehend wahr und bist emotional sensibel.")
+        elif profil["Neuroticism"] >= 3:
+            sätze.append("Du bist reflektiert und emotional ausgewogen.")
+        else:
+            sätze.append("Du bist sehr stabil, ruhig und wenig stressanfällig.")
+
+    # RIASEC
+    if "Realistic_Bewegung" in profil:
+        if profil["Realistic_Bewegung"] >= 4:
+            sätze.append("Du hast eine starke körperliche Aktivitätsorientierung – Bewegung, Sport oder praktische Arbeit liegen dir.")
+        elif profil["Realistic_Bewegung"] >= 3:
+            sätze.append("Du bewegst dich gerne, bevorzugst aber eine ausgewogene Mischung aus Praxis und Theorie.")
+        else:
+            sätze.append("Du bevorzugst eher theoretische oder sitzende Tätigkeiten.")
+
+    if "Realistic_Technik" in profil:
+        if profil["Realistic_Technik"] >= 4:
+            sätze.append("Du interessierst dich stark für technische Zusammenhänge, Maschinen oder Werkzeuge.")
+        elif profil["Realistic_Technik"] >= 3:
+            sätze.append("Technik und praktische Umsetzung interessieren dich, wenn der Bezug stimmt.")
+        else:
+            sätze.append("Du bist eher weniger technikaffin und bevorzugst andere Denk- oder Arbeitsweisen.")
+
+    return " ".join(sätze)
+
 def ergebnisse_seite():
     st.header("📊 Deine Studiengangs-Empfehlungen")
 
@@ -128,7 +191,7 @@ def ergebnisse_seite():
     df = df.sort_values('Match', ascending=False)
 
     st.subheader("🧠 Dein Persönlichkeitsprofil")
-    st.markdown(beschreibe_profil(profil))
+    st.markdown(beschreibe_profil_fliess(profil))
     for dim in sorted(profil):
         filled = int(round(profil[dim]))
         bar = "🟦" * filled + "⬜" * (5 - filled)
