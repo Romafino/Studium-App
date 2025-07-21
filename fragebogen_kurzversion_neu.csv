@@ -1,0 +1,41 @@
+Frage;Zuordnung;Deutsche_Bezeichnung;Erläuterung;Reverse
+Ich löse gerne komplexe Probleme durch systematisches Nachdenken.;Investigative;Forschend-analytisch;"Mag intellektuelle Herausforderungen; sucht nach Wissen und Verständnis; forscht gern und löst abstrakte Probleme.";0
+Ich recherchiere gerne und gehe Dingen auf den Grund.;Investigative;Forschend-analytisch;"Mag intellektuelle Herausforderungen; sucht nach Wissen und Verständnis; forscht gern und löst abstrakte Probleme.";0
+Theoretische Überlegungen langweilen mich.;Investigative;Forschend-analytisch;"Mag intellektuelle Herausforderungen; sucht nach Wissen und Verständnis; forscht gern und löst abstrakte Probleme.";1
+Ich drücke mich gerne kreativ aus (Kunst, Musik, Schreiben, Design).;Artistic;Kreativ-gestalterisch;"Mag kreative, unstrukturierte Aktivitäten; drückt sich gern künstlerisch aus; bevorzugt Originalität und Selbstausdruck.";0
+Ich entwickle gerne neue, ungewöhnliche Ideen.;Artistic;Kreativ-gestalterisch;"Mag kreative, unstrukturierte Aktivitäten; drückt sich gern künstlerisch aus; bevorzugt Originalität und Selbstausdruck.";0
+Ich mag es nicht, wenn Dinge zu abstrakt oder künstlerisch werden.;Artistic;Kreativ-gestalterisch;"Mag kreative, unstrukturierte Aktivitäten; drückt sich gern künstlerisch aus; bevorzugt Originalität und Selbstausdruck.";1
+Es bereitet mir Freude, anderen Menschen zu helfen.;Social;Sozial-helfend;"Mag zwischenmenschliche Aktivitäten; hilft, lehrt oder berät gern andere; arbeitet gern im Team und für das Gemeinwohl.";0
+Ich kann gut auf die Bedürfnisse anderer eingehen.;Social;Sozial-helfend;"Mag zwischenmenschliche Aktivitäten; hilft, lehrt oder berät gern andere; arbeitet gern im Team und für das Gemeinwohl.";0
+Soziale Probleme anderer belasten mich nicht.;Social;Sozial-helfend;"Mag zwischenmenschliche Aktivitäten; hilft, lehrt oder berät gern andere; arbeitet gern im Team und für das Gemeinwohl.";1
+Ich übernehme gerne die Führung in Projekten.;Enterprising;Führend-unternehmerisch;"Mag Führungsaufgaben; überzeugt und beeinflusst gern andere; strebt nach Erfolg, Status und materiellen Zielen.";0
+Ich kann andere gut von meinen Ideen überzeugen.;Enterprising;Führend-unternehmerisch;"Mag Führungsaufgaben; überzeugt und beeinflusst gern andere; strebt nach Erfolg, Status und materiellen Zielen.";0
+Verantwortung für wichtige Entscheidungen macht mir Angst.;Enterprising;Führend-unternehmerisch;"Mag Führungsaufgaben; überzeugt und beeinflusst gern andere; strebt nach Erfolg, Status und materiellen Zielen.";1
+Ich arbeite gerne mit klaren Regeln und Strukturen.;Conventional;Strukturiert-ordnend;"Mag strukturierte, geregelte Tätigkeiten; arbeitet gern mit Daten und Details; bevorzugt klare Anweisungen und Routinen.";0
+Ordnung und Systematik sind mir sehr wichtig.;Conventional;Strukturiert-ordnend;"Mag strukturierte, geregelte Tätigkeiten; arbeitet gern mit Daten und Details; bevorzugt klare Anweisungen und Routinen.";0
+Zu viele Vorschriften engen mich ein.;Conventional;Strukturiert-ordnend;"Mag strukturierte, geregelte Tätigkeiten; arbeitet gern mit Daten und Details; bevorzugt klare Anweisungen und Routinen.";1
+Ich bin neugierig und probiere gerne Neues aus.;Openness;Offenheit für Erfahrungen;"Ist aufgeschlossen für neue Erfahrungen; schätzt Kunst, Emotionen und ungewöhnliche Ideen; ist intellektuell neugierig.";0
+Ich hinterfrage gerne Traditionen und gewohnte Abläufe.;Openness;Offenheit für Erfahrungen;"Ist aufgeschlossen für neue Erfahrungen; schätzt Kunst, Emotionen und ungewöhnliche Ideen; ist intellektuell neugierig.";0
+Bewährte Methoden sind mir lieber als Experimente.;Openness;Offenheit für Erfahrungen;"Ist aufgeschlossen für neue Erfahrungen; schätzt Kunst, Emotionen und ungewöhnliche Ideen; ist intellektuell neugierig.";1
+Ich bin offen für ungewöhnliche Ideen und Perspektiven.;Openness;Offenheit für Erfahrungen;"Ist aufgeschlossen für neue Erfahrungen; schätzt Kunst, Emotionen und ungewöhnliche Ideen; ist intellektuell neugierig.";0
+Ich erledige meine Aufgaben sorgfältig und gewissenhaft.;Conscientiousness;Gewissenhaftigkeit;"Ist organisiert, zuverlässig und diszipliniert; arbeitet zielstrebig und gründlich; plant voraus und hält sich an Regeln.";0
+Ich halte Termine und Versprechen zuverlässig ein.;Conscientiousness;Gewissenhaftigkeit;"Ist organisiert, zuverlässig und diszipliniert; arbeitet zielstrebig und gründlich; plant voraus und hält sich an Regeln.";0
+Ich lasse mich leicht ablenken und verliere den Fokus.;Conscientiousness;Gewissenhaftigkeit;"Ist organisiert, zuverlässig und diszipliniert; arbeitet zielstrebig und gründlich; plant voraus und hält sich an Regeln.";1
+Ich arbeite auch bei langweiligen Aufgaben gründlich.;Conscientiousness;Gewissenhaftigkeit;"Ist organisiert, zuverlässig und diszipliniert; arbeitet zielstrebig und gründlich; plant voraus und hält sich an Regeln.";0
+In Gesellschaft blühe ich auf und bin voller Energie.;Extraversion;Extraversion;"Ist gesellig, gesprächig und energiegeladen; sucht Stimulation und genießt die Gesellschaft anderer; ist durchsetzungsfähig.";0
+Ich knüpfe leicht neue Kontakte und gehe auf Menschen zu.;Extraversion;Extraversion;"Ist gesellig, gesprächig und energiegeladen; sucht Stimulation und genießt die Gesellschaft anderer; ist durchsetzungsfähig.";0
+Große Menschenmengen strengen mich an.;Extraversion;Extraversion;"Ist gesellig, gesprächig und energiegeladen; sucht Stimulation und genießt die Gesellschaft anderer; ist durchsetzungsfähig.";1
+Ich übernehme gerne das Wort in Gruppendiskussionen.;Extraversion;Extraversion;"Ist gesellig, gesprächig und energiegeladen; sucht Stimulation und genießt die Gesellschaft anderer; ist durchsetzungsfähig.";0
+Ich gehe rücksichtsvoll mit anderen um.;Agreeableness;Verträglichkeit;"Ist kooperativ, vertrauensvoll und hilfsbereit; zeigt Mitgefühl und Rücksichtnahme; vermeidet Konflikte und ist kompromissbereit.";0
+Konflikte löse ich lieber durch Kompromisse als durch Konfrontation.;Agreeableness;Verträglichkeit;"Ist kooperativ, vertrauensvoll und hilfsbereit; zeigt Mitgefühl und Rücksichtnahme; vermeidet Konflikte und ist kompromissbereit.";0
+Meine eigenen Bedürfnisse stelle ich selten hinten an.;Agreeableness;Verträglichkeit;"Ist kooperativ, vertrauensvoll und hilfsbereit; zeigt Mitgefühl und Rücksichtnahme; vermeidet Konflikte und ist kompromissbereit.";1
+Ich verzeihe anderen ihre Fehler relativ leicht.;Agreeableness;Verträglichkeit;"Ist kooperativ, vertrauensvoll und hilfsbereit; zeigt Mitgefühl und Rücksichtnahme; vermeidet Konflikte und ist kompromissbereit.";0
+Ich mache mir oft Sorgen über verschiedene Dinge.;Neuroticism;Neurotizismus;"Neigt zu emotionaler Instabilität; erlebt häufig negative Emotionen wie Angst, Ärger oder Traurigkeit; ist stressanfällig.";0
+Stress und Druck setzen mir schnell zu.;Neuroticism;Neurotizismus;"Neigt zu emotionaler Instabilität; erlebt häufig negative Emotionen wie Angst, Ärger oder Traurigkeit; ist stressanfällig.";0
+Ich bleibe auch in Krisen ruhig und besonnen.;Neuroticism;Neurotizismus;"Neigt zu emotionaler Instabilität; erlebt häufig negative Emotionen wie Angst, Ärger oder Traurigkeit; ist stressanfällig.";1
+Kritik nehme ich mir sehr zu Herzen.;Neuroticism;Neurotizismus;"Neigt zu emotionaler Instabilität; erlebt häufig negative Emotionen wie Angst, Ärger oder Traurigkeit; ist stressanfällig.";0
+Ich bin gerne körperlich aktiv oder in Bewegung.;Realistic_Bewegung;Bewegungsbezogen;Mag Sport, Bewegung oder körperliche Aktivität;0
+Ich helfe gerne dabei, Übungen korrekt umzusetzen oder Bewegungen zu erklären.;Realistic_Bewegung;Bewegungsbezogen;Unterstützt andere bei körperlichen Tätigkeiten;0
+Technische Zusammenhänge und Mechanismen faszinieren mich.;Realistic_Technik;Technikorientiert;Hat Interesse an Technik, Mechanik, technischen Abläufen;0
+Ich arbeite gerne mit meinen Händen und erstelle oder repariere Dinge.;Realistic_Technik;Technikorientiert;Mag handwerkliche, praktische Aufgaben mit Werkzeugen oder Material;0
+Ich vermeide körperliche Arbeit, wenn es möglich ist.;Realistic_Bewegung;Bewegungsbezogen;Körperliche Aktivität wird eher abgelehnt;1
