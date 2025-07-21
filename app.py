@@ -108,6 +108,17 @@ def berechne_match(profil, row):
 
     return min(score, 100)
 
+def beschreibe_profil(profil):
+    beschreibung = []
+    stufen = [(1.0, 2.4, "wenig ausgeprägt"), (2.5, 3.4, "mittel ausgeprägt"),
+              (3.5, 4.4, "stark ausgeprägt"), (4.5, 5.0, "sehr stark ausgeprägt")]
+    for dim, wert in profil.items():
+        for min_val, max_val, text in stufen:
+            if min_val <= wert <= max_val:
+                beschreibung.append(f"- **{dim}**: {text} ({wert:.1f}/5)")
+                break
+    return "\n".join(beschreibung)
+
 def ergebnisse_seite():
     st.header("📊 Deine Studiengangs-Empfehlungen")
 
@@ -174,4 +185,3 @@ def beschreibe_profil(profil):
                 beschreibung.append(f"- **{dim}**: {text} ({wert:.1f}/5)")
                 break
     return "\n".join(beschreibung)
-
