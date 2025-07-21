@@ -6,7 +6,7 @@ st.set_page_config(page_title="Studiengangs-Matching", page_icon="🎓", layout=
 
 @st.cache_data
 def lade_fragen():
-    return pd.read_csv("fragebogen_kurzversion.csv", sep=";")
+    return pd.read_csv("fragebogen_kurzversion_neu.csv", sep=";")
 
 @st.cache_data
 def lade_studiengaenge():
@@ -117,6 +117,7 @@ def ergebnisse_seite():
     df = df.sort_values('Match', ascending=False)
 
     st.subheader("🧠 Dein Persönlichkeitsprofil")
+st.markdown(beschreibe_profil(profil))
     for dim in sorted(profil):
         filled = int(round(profil[dim]))
         bar = "🟦" * filled + "⬜" * (5 - filled)
@@ -161,3 +162,16 @@ def haupt():
 
 if __name__ == '__main__':
     haupt()
+
+
+def beschreibe_profil(profil):
+    beschreibung = []
+    stufen = [(1.0, 2.4, "wenig ausgeprägt"), (2.5, 3.4, "mittel ausgeprägt"),
+              (3.5, 4.4, "stark ausgeprägt"), (4.5, 5.0, "sehr stark ausgeprägt")]
+    for dim, wert in profil.items():
+        for min_val, max_val, text in stufen:
+            if min_val <= wert <= max_val:
+                beschreibung.append(f"- **{dim}**: {text} ({wert:.1f}/5)")
+                break
+    return "\n".join(beschreibung)
+
