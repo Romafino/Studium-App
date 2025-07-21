@@ -117,7 +117,7 @@ def ergebnisse_seite():
     df = df.sort_values('Match', ascending=False)
 
     st.subheader("🧠 Dein Persönlichkeitsprofil")
-st.markdown(beschreibe_profil(profil))
+    st.markdown(beschreibe_profil(profil))
     for dim in sorted(profil):
         filled = int(round(profil[dim]))
         bar = "🟦" * filled + "⬜" * (5 - filled)
