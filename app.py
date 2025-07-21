@@ -10,7 +10,7 @@ def lade_fragen():
 
 @st.cache_data
 def lade_studiengaenge():
-    df = pd.read_csv("Zuordnung_Studium_Beruf_Vollständig_MOTIVIERT.csv", sep=";")
+    df = pd.read_csv("Zuordnung_Studium_Beruf_Neu.csv", sep=";")
     return df
 
 def init_state():
@@ -82,98 +82,31 @@ def berechne_profil():
         zähler[dim] = zähler.get(dim, 0) + 1
     return {k: werte[k]/zähler[k] for k in werte}
 
-def berechne_match(profil, zeile):
+def berechne_match(profil, row):
     dims = profil.keys()
     abweichung = np.mean([abs(profil[d] - 3) for d in dims])
     score = max(0, 100 - abweichung * 20)
 
-    if st.session_state.zusatz['motivation'] == "Berufsaussichten" and str(zeile.get("Arbeitsmarktbedarf", "")).lower() == "sehr hoch":
-        score *= 1.1
+    motivation = st.session_state.zusatz.get("motivation", "")
+
+    if motivation == "Berufsaussichten":
+        if str(row.get("Arbeitsmarktbedarf", "")).lower() == "sehr hoch":
+            score *= 1.1
+
+    elif motivation == "Persönliche Leidenschaft":
+        score *= 1.15
+
+    elif motivation == "Gesellschaftlicher Beitrag":
+        soziale_faktoren = ["Social", "Artistic", "Enterprising"]
+        bonus = sum(profil.get(f, 3) - 3 for f in soziale_faktoren) / len(soziale_faktoren)
+        score *= 1 + (bonus * 0.05)
+
+    # Extraversion-Anpassung
+    extraversion = profil.get("Extraversion", 3)
+    if "sozial" in str(row.get("Berufsfelder TOP3", "")).lower() or row.get("Social", "").lower() in ["stark", "sehr stark"]:
+        score *= 1 + ((extraversion - 3) * 0.03)
 
     return min(score, 100)
-
-def beschreibe_profil(profil):
-    def skalierte_beschreibung(name, wert, stufen):
-        for (min_val, max_val, text) in stufen:
-            if min_val <= wert <= max_val:
-                return f"**{name}** ({wert:.1f}/5): {text}"
-        return f"**{name}** ({wert:.1f}/5): Beschreibung nicht verfügbar."
-
-    beschreibung = []
-    beschreibung.append("🔍 **RIASEC-Profil**")
-
-    riaisec_stufen = {
-        "Realistic": [
-            (1.0, 2.4, "Du bevorzugst geistige oder kreative Arbeit mehr als praktisches Tun."),
-            (2.5, 3.4, "Du fühlst dich in technischen und praktischen Aufgaben phasenweise wohl."),
-            (3.5, 5.0, "Du bist handlungsorientiert, praktisch veranlagt und liebst Technik, Werkzeuge oder Maschinen.")
-        ],
-        "Investigative": [
-            (1.0, 2.4, "Analytisches oder forschendes Arbeiten liegt dir weniger."),
-            (2.5, 3.4, "Du denkst gerne nach und analysierst – aber nur, wenn es Sinn ergibt."),
-            (3.5, 5.0, "Du hast eine starke Neigung zu Forschung, Analyse und tiefem Verständnis.")
-        ],
-        "Artistic": [
-            (1.0, 2.4, "Kreativität spielt in deinem Alltag eher eine untergeordnete Rolle."),
-            (2.5, 3.4, "Du hast ein gewisses Gespür für Gestaltung und Ideen, nutzt es aber selektiv."),
-            (3.5, 5.0, "Du bist ideenreich, fantasievoll und suchst kreative Ausdrucksformen.")
-        ],
-        "Social": [
-            (1.0, 2.4, "Du arbeitest lieber unabhängig und brauchst nicht ständig den Austausch mit anderen."),
-            (2.5, 3.4, "Du schätzt Zusammenarbeit in bestimmten Situationen, bist aber auch gerne für dich."),
-            (3.5, 5.0, "Du blühst in sozialen Kontexten auf und hilfst gerne anderen.")
-        ],
-        "Enterprising": [
-            (1.0, 2.4, "Führen, Überzeugen oder Risiko liegen dir eher nicht."),
-            (2.5, 3.4, "Du bist manchmal gerne durchsetzungsstark, aber ohne Dominanz."),
-            (3.5, 5.0, "Du bist führungsstark, überzeugend und hast ein Gespür für unternehmerisches Handeln.")
-        ],
-        "Conventional": [
-            (1.0, 2.4, "Du fühlst dich mit zu viel Struktur oder Routine schnell eingeschränkt."),
-            (2.5, 3.4, "Du schätzt Ordnung, aber brauchst auch Freiraum."),
-            (3.5, 5.0, "Du arbeitest gerne organisiert, planvoll und liebst klare Abläufe.")
-        ]
-    }
-
-    for dim in riaisec_stufen:
-        if dim in profil:
-            beschreibung.append(skalierte_beschreibung(dim, profil[dim], riaisec_stufen[dim]))
-
-    beschreibung.append("\n🧠 **Big Five Persönlichkeitsprofil**")
-
-    bigfive_stufen = {
-        "Openness": [
-            (1.0, 2.4, "Du bevorzugst Altbewährtes und hast weniger Interesse an Neuem oder Abstraktem."),
-            (2.5, 3.4, "Du bist offen für Neues, wenn es praktikabel und sinnvoll erscheint."),
-            (3.5, 5.0, "Du bist neugierig, kreativ und liebst es, neue Perspektiven zu entdecken.")
-        ],
-        "Conscientiousness": [
-            (1.0, 2.4, "Du lässt dich gerne treiben und brauchst Flexibilität."),
-            (2.5, 3.4, "Du bist zuverlässig, aber nimmst Regeln nicht zu ernst."),
-            (3.5, 5.0, "Du bist verantwortungsvoll, strukturiert und arbeitest zielgerichtet.")
-        ],
-        "Extraversion": [
-            (1.0, 2.4, "Du genießt Ruhe, denkst gerne nach und brauchst Zeit für dich."),
-            (2.5, 3.4, "Du bist sozial ausgewogen – du kannst sowohl mit Menschen als auch allein gut umgehen."),
-            (3.5, 5.0, "Du bist kommunikativ, energiegeladen und suchst den Austausch.")
-        ],
-        "Agreeableness": [
-            (1.0, 2.4, "Du hinterfragst gerne und sagst klar deine Meinung."),
-            (2.5, 3.4, "Du bist hilfsbereit, aber setzt auch klare Grenzen."),
-            (3.5, 5.0, "Du bist warmherzig, kooperativ und schätzt harmonische Beziehungen.")
-        ],
-        "Neuroticism": [
-            (1.0, 2.4, "Du bist emotional sehr stabil und lässt dich selten aus der Ruhe bringen."),
-            (2.5, 3.4, "Du bist reflektiert und reagierst situationsangemessen."),
-            (3.5, 5.0, "Du bist feinfühlig, sensibel und nimmst emotionale Reize stärker wahr.")
-        ]
-    }
-
-    for dim in bigfive_stufen:
-        if dim in profil:
-            beschreibung.append(skalierte_beschreibung(dim, profil[dim], bigfive_stufen[dim]))
-
-    return "\n".join(beschreibung)
 
 def ergebnisse_seite():
     st.header("📊 Deine Studiengangs-Empfehlungen")
@@ -189,9 +122,7 @@ def ergebnisse_seite():
         bar = "🟦" * filled + "⬜" * (5 - filled)
         st.write(f"**{dim}**: {bar} ({profil[dim]:.1f}/5)")
 
-    st.markdown(beschreibe_profil(profil))
-
-    st.subheader("🎯 Top Studiengänge")
+    st.subheader("🎯 Studiengänge passend zu deinem Profil")
     seite = st.session_state.ergebnis_seite
     pro_seite = 10
     top = df.iloc[seite * pro_seite : (seite + 1) * pro_seite]
@@ -201,16 +132,11 @@ def ergebnisse_seite():
         match = row.get('Match', 0)
         with st.expander(f"{studiengang} — Match: {match:.0f}%"):
             st.write(f"**📌 NC:** {row.get('NC', 'k.A.')}")
-
-            berufe = [row.get(f'Beruf_{i}', '') for i in range(1, 6)]
-            berufe = [b for b in berufe if pd.notna(b) and b.strip()]
-            st.write(f"**🧑‍🔧 Typische Berufe:** {', '.join(berufe) if berufe else 'k.A.'}")
-
-            st.write(f"**💼 Berufsfelder:** {row.get('Berufsfelder TOP3', 'k.A.')}")
-            st.write(f"**🪙 Einstiegsspanne:** {row.get('Einstieg spanne', 'k.A.')}")
             st.write(f"**💰 Einstiegsgehalt:** {row.get('Einstiegsgehalt', 'k.A.')} €")
-            st.write(f"**📊 Gehalt nach 5 Jahren:** {row.get('Gehalt nach 5 Jahren', 'k.A.')} €")
+            st.write(f"**💼 Berufsfelder:** {row.get('Berufsfelder TOP3', 'k.A.')}")
             st.write(f"**📈 Arbeitsmarktbedarf:** {row.get('Arbeitsmarktbedarf', 'k.A.')}")
+            st.write(f"**🪙 Einstiegsspanne:** {row.get('Einstieg spanne', 'k.A.')}")
+            st.write(f"**📊 Gehalt nach 5 Jahren:** {row.get('Gehalt nach 5 Jahren', 'k.A.')} €")
 
     col1, col2 = st.columns(2)
     if seite > 0:
